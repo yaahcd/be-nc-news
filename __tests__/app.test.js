@@ -47,4 +47,11 @@ afterAll(() => {
       });
     });
   });
+  test('200: Should return objects without body property', () => {
+    return request(app).get('/api/articles').expect(200).then(({body}) => {
+      body.forEach((article)=>{
+        expect(article).not.toHaveProperty('body');
+      });
+    });
+  });
  });
