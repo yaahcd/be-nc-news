@@ -5,4 +5,11 @@ exports.selectAllModels = () => {
     .then((topics) => {
       return topics.rows
     })
-}
+};
+
+exports.selectAllArticles = () => {
+  return db.query(`SELECT * FROM articles`)
+  .then((articles) => {
+    return articles.rows
+  })
+};
