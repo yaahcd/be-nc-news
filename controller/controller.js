@@ -1,4 +1,9 @@
 const { selectAllModels, selectArticlesById } = require("../model/model")
+const jsonEndPoints = require('../endpoints.json');
+
+exports.getApi = (req, res, next) => {
+  res.status(200).send(jsonEndPoints)
+};
 
 exports.getAllTopics = (req, res, next) => {
 selectAllModels()
