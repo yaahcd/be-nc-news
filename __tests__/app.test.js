@@ -3,7 +3,7 @@ const seed = require('../db/seeds/seed');
 const app = require('../app');
 const data = require('../db/data/test-data/index');
 const request = require('supertest');
-const jsonEndPoints = require('../endpoints.json')
+const jsonEndPoints = require('../endpoints.json');
 
 afterAll(() => {
   db.end()
@@ -16,7 +16,7 @@ afterAll(() => {
  describe('GET /api', () => {
   test('200: Should return a JSON object with descriptions of all endpoints available', () => {
     return request(app).get('/api').expect(200).then(({body}) => {
-      console.log(body)
+      expect(body).toEqual(jsonEndPoints)
     })
   })
  })

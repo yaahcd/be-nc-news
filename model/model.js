@@ -5,6 +5,4 @@ exports.selectAllModels = () => {
     .then((topics) => {
       return topics.rows
     })
-}
-
-console.log(this.selectAllModels)
+};
