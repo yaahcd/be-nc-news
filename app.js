@@ -1,5 +1,6 @@
 const express = require('express');
 const { getAllTopics, getArticlesById } = require('./controller/controller');
+const { handlePsqlErrors } = require('./errors/errors')
 
 const app = express();
 
@@ -13,6 +14,10 @@ app.use((err, req, res, next) => {
   } else {
     next(err)
   }
+});
+
+app.use((err, req, res, next) => {
+  handlePsqlErrors(err, req, res, next)
 });
 
 module.exports = app;

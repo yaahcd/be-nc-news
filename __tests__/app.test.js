@@ -5,7 +5,7 @@ const data = require('../db/data/test-data/index');
 const request = require('supertest');
 
 afterAll(() => {
-  db.end()
+  return db.end()
  });
  
  beforeEach(() => {
@@ -36,9 +36,14 @@ afterAll(() => {
       expect(body[0].article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
     });
   });
-  test('Status 404 -  valid but non existent id', () => {
-    return request(app).get('/api/articles/20').expect(404).then(({ body }) => {
+  test('404: valid but non-existent id', () => {
+    return request(app).get('/api/articles/20').expect(404).then(({body}) => {
       expect(body.msg).toBe('Invalid ID');
+    });
+  });
+  test('400: invalid id (NAN)', () => {
+    return request(app).get('/api/articles/banana').expect(400).then(({body}) => {
+      expect(body.msg).toBe('Bad request');
     });
   });
  });
