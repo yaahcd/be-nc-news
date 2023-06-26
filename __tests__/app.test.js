@@ -24,17 +24,18 @@ afterAll(() => {
   })
  })
  describe('GET /api/articles', () => {
-  test('200: Should return with an array containing all articles as objects', () => {
+  test('200: Should return with an array containing all articles as objects with comment_count key and sorted by date in descending order', () => {
     return request(app).get('/api/articles').expect(200).then(({body}) => {
+        expect(body).toBeSortedBy('created_at',{descending: true})
         body.forEach((article)=>{
         expect(article).toHaveProperty('article_id', expect.any(Number));
         expect(article).toHaveProperty('title', expect.any(String));
         expect(article).toHaveProperty('topic', expect.any(String));
         expect(article).toHaveProperty('author', expect.any(String));
-        expect(article).toHaveProperty('body', expect.any(String));
         expect(article).toHaveProperty('created_at', expect.any(String));
         expect(article).toHaveProperty('article_img_url', expect.any(String));
-      })
-    })
-  })
- })
+        expect(article).toHaveProperty('comment_count', expect.any(String));
+      });
+    });
+  });
+ });
