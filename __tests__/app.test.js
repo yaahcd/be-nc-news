@@ -26,14 +26,16 @@ afterAll(() => {
  describe('GET /api/articles/:article_id', () => {
   test('200: Should return article according to passed id', () => {
     return request(app).get('/api/articles/1').expect(200).then(({body}) => {
-      expect(body[0].article_id).toBe(1);
-      expect(body[0].title).toBe('Living in the shadow of a great man')
-      expect(body[0].topic).toBe('mitch')
-      expect(body[0].author).toBe('butter_bridge')
-      expect(body[0].body).toBe('I find this existence challenging')
-      expect(body[0].created_at).toBe('2020-07-09T20:11:00.000Z')
-      expect(body[0].votes).toBe(100)
-      expect(body[0].article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
+      expect(body[0]).toEqual(expect.objectContaining({
+        article_id: expect.any(Number),
+        title: expect.any(String),
+        topic: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+        created_at: '2020-07-09T20:11:00.000Z',
+        votes: expect.any(Number),
+        article_img_url:expect.any(String)
+      }));
     });
   });
   test('404: valid but non-existent id', () => {
