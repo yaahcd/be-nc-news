@@ -5,6 +5,7 @@ const {
 	addCommentByArticleId,
 	selectCommentsByArticleId,
 	checkIdExists,
+  selectAllUsers,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -59,3 +60,9 @@ exports.getCommentsByArticleId = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+exports.getAllUsers = (req, res, next) => {
+  selectAllUsers().then((users) => {
+		res.status(200).send(users);
+	});
+}

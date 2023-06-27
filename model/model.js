@@ -65,3 +65,9 @@ exports.checkIdExists = (id) => {
 			}
 		});
 };
+
+exports.selectAllUsers = () => {
+	return db.query(`SELECT * FROM users`).then((users) => {
+		return users.rows;
+	});
+}
