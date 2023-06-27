@@ -4,6 +4,7 @@ const {
 	getApi,
 	getAllArticles,
 	getArticlesById,
+	updateVotesById,
 	postCommentByArticleId,
   getCommentsByArticleId,
 } = require('./controller/controller');
@@ -20,6 +21,8 @@ app.get('/api/topics', getAllTopics);
 app.get('/api/articles', getAllArticles);
 
 app.get('/api/articles/:article_id', getArticlesById);
+
+app.patch('/api/articles/:article_id', updateVotesById);
 
 app.post('/api/articles/:article_id/comments', postCommentByArticleId);
 

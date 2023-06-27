@@ -33,6 +33,22 @@ exports.selectArticlesById = (id) => {
 		});
 };
 
+exports.updatedVotesOfSelectedId = (id, inputVotes) => {
+	return db
+		.query(`SELECT votes FROM articles WHERE article_id = $1;`, [id])
+		.then(({ rows }) => {
+			const newVotes = rows[0].votes + inputVotes;
+			return db
+				.query(
+					`UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *;`,
+					[newVotes, id]
+				)
+				.then((updatedArticle) => {
+					return updatedArticle.rows;
+				});
+		})
+	}
+	
 exports.addCommentByArticleId = (id, body) => {
 	return db
 		.query(

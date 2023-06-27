@@ -104,41 +104,29 @@ test('200: Should return objects without body property', () => {
 			});
 		});
 });
-describe('GET /api/articles/:article_id/comments', () => {
-	test('200: Should return array of objects with comments that correspond to passed article id', () => {
+describe('PATCH /api/articles/:article_id', () => {
+	test('200: Should return article with updated vote count when passed a positive number', () => {
 		return request(app)
-			.get('/api/articles/1/comments')
-			.expect(200)
+			.patch('/api/articles/1')
+			.send({ inc_votes: 9 })
+			.expect(201)
 			.then(({ body }) => {
-				body.forEach((comment) => {
-					expect(comment).toHaveProperty('comment_id', expect.any(Number));
-					expect(comment).toHaveProperty('body', expect.any(String));
-					expect(comment).toHaveProperty('article_id', expect.any(Number));
-					expect(comment).toHaveProperty('author', expect.any(String));
-					expect(comment).toHaveProperty('votes', expect.any(Number));
-					expect(comment).toHaveProperty('created_at', expect.any(String));
-				});
+				expect(body[0].votes).toBe(109);
 			});
 	});
-	test('200: Returned comments should be ordered by most recent first', () => {
+	test('200: Should return article with updated vote count when passed a negative number', () => {
 		return request(app)
-			.get('/api/articles/1/comments')
-			.expect(200)
+			.patch('/api/articles/1')
+			.send({ inc_votes: -150 })
+			.expect(201)
 			.then(({ body }) => {
-				expect(body).toBeSortedBy('created_at', { descending: true });
-			});
-	});
-	test('200: Returns an empty array when passed id has no comments linked to it', () => {
-		return request(app)
-			.get('/api/articles/2/comments')
-			.expect(200)
-			.then(({ body }) => {
-				expect(body).toEqual([]);
+				expect(body[0].votes).toBe(-50);
 			});
 	});
 	test('404: valid but non-existent id', () => {
 		return request(app)
-			.get('/api/articles/65/comments')
+			.patch('/api/articles/25')
+			.send({ inc_votes: -150 })
 			.expect(404)
 			.then(({ body }) => {
 				expect(body.msg).toBe('Invalid ID');
@@ -146,7 +134,17 @@ describe('GET /api/articles/:article_id/comments', () => {
 	});
 	test('400: invalid id (NAN)', () => {
 		return request(app)
-			.get('/api/articles/banana/comments')
+			.patch('/api/articles/banana')
+			.send({ inc_votes: -150 })
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+	test('400: invalid input passed (NAN)', () => {
+		return request(app)
+			.patch('/api/articles/1')
+			.send({ inc_votes: 'banana' })
 			.expect(400)
 			.then(({ body }) => {
 				expect(body.msg).toBe('Bad request');
