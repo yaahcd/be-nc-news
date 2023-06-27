@@ -5,6 +5,7 @@ const {
 	getAllArticles,
 	getArticlesById,
 	postCommentByArticleId,
+  getCommentsByArticleId,
 } = require('./controller/controller');
 const { handlePsqlErrors, handleServerErrors } = require('./errors/errors');
 
@@ -21,6 +22,8 @@ app.get('/api/articles', getAllArticles);
 app.get('/api/articles/:article_id', getArticlesById);
 
 app.post('/api/articles/:article_id/comments', postCommentByArticleId);
+
+app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 
 app.use((err, req, res, next) => {
 	if (err.msg) {
