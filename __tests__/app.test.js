@@ -128,6 +128,14 @@ describe('GET /api/articles/:article_id/comments', () => {
 				expect(body).toBeSortedBy('created_at', { descending: true });
 			});
 	});
+	test('200: Returns an empty array when passed id has no comments linked to it', () => {
+		return request(app)
+			.get('/api/articles/2/comments')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body).toEqual([]);
+			});
+	});
 	test('404: valid but non-existent id', () => {
 		return request(app)
 			.get('/api/articles/65/comments')
