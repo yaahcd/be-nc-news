@@ -63,6 +63,6 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
   selectAllUsers().then((users) => {
-		res.status(200).send(users);
+		res.status(200).send({users});
 	});
 }

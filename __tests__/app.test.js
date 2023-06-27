@@ -222,8 +222,8 @@ describe('GET /api/users', () => {
 			.get('/api/users')
 			.expect(200)
 			.then(({ body }) => {
-				expect(body.length).toBe(4);
-				body.forEach((user) => {
+				expect(body.users.length).toBe(4);
+				body.users.forEach((user) => {
 					expect(user).toHaveProperty('username', expect.any(String));
 					expect(user).toHaveProperty('name', expect.any(String));
 					expect(user).toHaveProperty('avatar_url', expect.any(String));
