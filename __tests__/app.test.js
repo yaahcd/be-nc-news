@@ -76,13 +76,13 @@ describe('GET /api/articles/:article_id', () => {
 	});
 });
 describe('GET /api/articles', () => {
-	test('200: Should return with an array containing all articles as objects with comment_count key and sorted by date in descending order', () => {
+	test('200: Should return an array containing all articles as objects with comment_count key and sorted by date in descending order', () => {
 		return request(app)
 			.get('/api/articles')
 			.expect(200)
 			.then(({ body }) => {
-				expect(body).toBeSortedBy('created_at', { descending: true });
-				body.forEach((article) => {
+				expect(body.articles).toBeSortedBy('created_at', { descending: true });
+				body.articles.forEach((article) => {
 					expect(article).toHaveProperty('article_id', expect.any(Number));
 					expect(article).toHaveProperty('title', expect.any(String));
 					expect(article).toHaveProperty('topic', expect.any(String));
@@ -99,10 +99,100 @@ test('200: Should return objects without body property', () => {
 		.get('/api/articles')
 		.expect(200)
 		.then(({ body }) => {
-			body.forEach((article) => {
+			body.articles.forEach((article) => {
 				expect(article).not.toHaveProperty('body');
 			});
 		});
+});
+describe('GET api/articles?topic=cats / mitch', () => {
+	test('200: Should return all articles that have cats as topic', () => {
+		return request(app)
+			.get('/api/articles?topic=cats')
+			.expect(200)
+			.then(({ body }) => {
+				body.articles.forEach((article) => {
+					expect(article.topic).toBe('cats');
+				});
+			});
+	});
+	test('200: Should return all articles that have mitch as topic', () => {
+		return request(app)
+			.get('/api/articles?topic=mitch')
+			.expect(200)
+			.then(({ body }) => {
+				body.articles.forEach((article) => {
+					expect(article.topic).toBe('mitch');
+				});
+			});
+	});
+	test('400: returns if invalid topic is passed', () => {
+		return request(app)
+			.get('/api/articles?topic=banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+});
+describe('GET api/articles?sort_by', () => {
+	test('200: should return articles sorted by date in descending order by default', () => {
+		return request(app)
+			.get('/api/articles')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy('created_at', { descending: true });
+			});
+	});
+	test('200: should return articles sorted by specified path in descending order', () => {
+		return request(app)
+			.get('/api/articles?sort_by=author')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy('author', { descending: true });
+			});
+	});
+	test('200: should return articles sorted by specified path in descending order', () => {
+		return request(app)
+			.get('/api/articles?sort_by=title')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy('title', { descending: true });
+			});
+	});
+	test('400: returns if invalid sort_by is passed', () => {
+		return request(app)
+			.get('/api/articles?sort_by=banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+});
+describe('GET api/articles?order=ASC / DESC', () => {
+	test('200: Should return article list ordered by descending order by default', () => {
+		return request(app)
+			.get('/api/articles')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy('created_at', { descending: true });
+			});
+	});
+	test('200: Should return article list ordered by specified order', () => {
+		return request(app)
+			.get('/api/articles?order=asc')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy('created_at', { ascending: true });
+			});
+	});
+	test('400: returns if invalid order by is passed', () => {
+		return request(app)
+			.get('/api/articles?order=banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
 });
 describe('PATCH /api/articles/:article_id', () => {
 	test('200: Should return article with updated vote count when passed a positive number', () => {
