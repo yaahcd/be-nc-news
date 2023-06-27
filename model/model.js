@@ -32,3 +32,24 @@ exports.selectArticlesById = (id) => {
 			return article.rows;
 		});
 };
+
+exports.addCommentByArticleId = (id, body) => {
+	return db
+		.query(
+			`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING*;`,
+			[body.username, body.body, id]
+		)
+		.then((newComment) => {
+			return newComment.rows;
+		});
+};
+
+exports.checkIdExists = (id) => {
+	return db
+		.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
+		.then((result) => {
+			if (result.rows.length === 0) {
+				return Promise.reject({ status: 404, msg: 'Invalid ID' });
+			}
+		});
+};

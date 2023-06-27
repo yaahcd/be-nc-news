@@ -4,10 +4,13 @@ const {
 	getApi,
 	getAllArticles,
 	getArticlesById,
+	postCommentByArticleId,
 } = require('./controller/controller');
-const { handlePsqlErrors } = require('./errors/errors');
+const { handlePsqlErrors, handleServerErrors } = require('./errors/errors');
 
 const app = express();
+
+app.use(express.json());
 
 app.get('/api', getApi);
 
@@ -17,6 +20,8 @@ app.get('/api/articles', getAllArticles);
 
 app.get('/api/articles/:article_id', getArticlesById);
 
+app.post('/api/articles/:article_id/comments', postCommentByArticleId);
+
 app.use((err, req, res, next) => {
 	if (err.msg) {
 		res.status(err.status).send({ msg: err.msg });
@@ -25,8 +30,8 @@ app.use((err, req, res, next) => {
 	}
 });
 
-app.use((err, req, res, next) => {
-	handlePsqlErrors(err, req, res, next);
-});
+app.use(handlePsqlErrors);
+
+app.use(handleServerErrors);
 
 module.exports = app;
