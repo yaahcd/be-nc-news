@@ -7,7 +7,7 @@ const {
 	updateVotesById,
 	deleteCommentById,
 	postCommentByArticleId,
-  getCommentsByArticleId,
+	getCommentsByArticleId,
 	getAllUsers,
 } = require('./controller/controller');
 const { handlePsqlErrors, handleServerErrors } = require('./errors/errors');

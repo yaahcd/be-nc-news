@@ -226,14 +226,14 @@ describe('GET /api/users', () => {
 					expect(user).toHaveProperty('name', expect.any(String));
 					expect(user).toHaveProperty('avatar_url', expect.any(String));
 				});
-			})
-		})
-	})
+			});
+	});
+});
 
 describe('DELETE /api/comments/:comment_id', () => {
 	test('204: Should return empty object if passed valid comment id', () => {
-		return request(app).delete('/api/comments/2').expect(204)
-	})
+		return request(app).delete('/api/comments/2').expect(204);
+	});
 	test('404: valid but non-existent id', () => {
 		return request(app)
 			.delete('/api/comments/25')
@@ -250,4 +250,4 @@ describe('DELETE /api/comments/:comment_id', () => {
 				expect(body.msg).toBe('Bad request');
 			});
 	});
-})
+});

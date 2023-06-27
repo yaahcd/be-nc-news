@@ -46,9 +46,9 @@ exports.updatedVotesOfSelectedId = (id, inputVotes) => {
 				.then((updatedArticle) => {
 					return updatedArticle.rows;
 				});
-		})
-	}
-	
+		});
+};
+
 exports.addCommentByArticleId = (id, body) => {
 	return db
 		.query(
@@ -86,12 +86,14 @@ exports.selectAllUsers = () => {
 	return db.query(`SELECT * FROM users`).then((users) => {
 		return users.rows;
 	});
-}
+};
 exports.deleteSelectedComment = (id) => {
- return db.query(`DELETE FROM comments WHERE comment_id = $1`, [id]).then((result) => {
-	return result
- })
-}
+	return db
+		.query(`DELETE FROM comments WHERE comment_id = $1`, [id])
+		.then((result) => {
+			return result;
+		});
+};
 
 exports.checkCommentIdExists = (id) => {
 	return db
@@ -101,4 +103,4 @@ exports.checkCommentIdExists = (id) => {
 				return Promise.reject({ status: 404, msg: 'Invalid ID' });
 			}
 		});
-}
+};
