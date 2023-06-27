@@ -32,3 +32,18 @@ exports.selectArticlesById = (id) => {
 			return article.rows;
 		});
 };
+
+exports.selectCommentsByArticleId = (id) => {
+	return db
+		.query(
+			`
+  SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`,
+			[id]
+		)
+		.then((comments) => {
+			if (comments.rows.length === 0) {
+				return Promise.reject({ status: 404, msg: 'Invalid ID' });
+			}
+			return comments.rows;
+		});
+};

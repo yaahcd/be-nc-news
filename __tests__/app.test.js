@@ -104,3 +104,44 @@ test('200: Should return objects without body property', () => {
 			});
 		});
 });
+describe('GET /api/articles/:article_id/comments', () => {
+	test('200: Should return array of objects with comments that correspond to passed article id', () => {
+		return request(app)
+			.get('/api/articles/1/comments')
+			.expect(200)
+			.then(({ body }) => {
+				body.forEach((comment) => {
+					expect(comment).toHaveProperty('comment_id', expect.any(Number));
+					expect(comment).toHaveProperty('body', expect.any(String));
+					expect(comment).toHaveProperty('article_id', expect.any(Number));
+					expect(comment).toHaveProperty('author', expect.any(String));
+					expect(comment).toHaveProperty('votes', expect.any(Number));
+					expect(comment).toHaveProperty('created_at', expect.any(String));
+				});
+			});
+	});
+	test('200: Returned comments should be ordered by most recent first', () => {
+		return request(app)
+			.get('/api/articles/1/comments')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body).toBeSortedBy('created_at', { descending: true });
+			});
+	});
+	test('404: valid but non-existent id', () => {
+		return request(app)
+			.get('/api/articles/65/comments')
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Invalid ID');
+			});
+	});
+	test('400: invalid id (NAN)', () => {
+		return request(app)
+			.get('/api/articles/banana/comments')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+});
