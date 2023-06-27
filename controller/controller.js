@@ -4,6 +4,8 @@ const {
 	selectArticlesById,
 	checkIdExists,
 	updatedVotesOfSelectedId,
+  checkCommentIdExists,
+  deleteSelectedComment,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -48,3 +50,15 @@ exports.updateVotesById = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+exports.deleteCommentById = (req, res, next) => {
+  const id = req.params.comment_id 
+
+  const promises = [checkCommentIdExists(id), deleteSelectedComment(id)]
+
+  Promise.all(promises).then((completedPromises) => {
+    const emptyObj = completedPromises
+    res.status(204).send(emptyObj)
+  })
+  .catch(next)
+}

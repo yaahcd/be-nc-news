@@ -151,3 +151,27 @@ describe('PATCH /api/articles/:article_id', () => {
 			});
 	});
 });
+describe('DELETE /api/comments/:comment_id', () => {
+	test('204: Should return empty object if passed valid comment id', () => {
+		return request(app).delete('/api/comments/2').expect(204).then(({body}) => {
+			expect(body).toEqual({})
+		})
+	})
+	test('404: valid but non-existent id', () => {
+		return request(app)
+			.delete('/api/comments/25')
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Invalid ID');
+			});
+	});
+	test('400: invalid id (NAN)', () => {
+		return request(app)
+			.delete('/api/comments/banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+})
+ 

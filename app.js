@@ -5,6 +5,7 @@ const {
 	getAllArticles,
 	getArticlesById,
 	updateVotesById,
+	deleteCommentById,
 } = require('./controller/controller');
 const { handlePsqlErrors } = require('./errors/errors');
 
@@ -21,6 +22,8 @@ app.get('/api/articles', getAllArticles);
 app.get('/api/articles/:article_id', getArticlesById);
 
 app.patch('/api/articles/:article_id', updateVotesById);
+
+app.delete('/api/comments/:comment_id', deleteCommentById);
 
 app.use((err, req, res, next) => {
 	if (err.msg) {
