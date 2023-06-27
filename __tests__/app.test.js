@@ -151,3 +151,66 @@ describe('PATCH /api/articles/:article_id', () => {
 			});
 	});
 });
+describe('POST /api/articles/:article_id/comments', () => {
+	const newComment = {
+		username: 'butter_bridge',
+		body: "my cat is snoring, couldn't finish reading",
+	};
+	test('201: Should return passed comment', () => {
+		return request(app)
+			.post('/api/articles/1/comments')
+			.send(newComment)
+			.expect(201)
+			.then(({ body }) => {
+				expect(body[0]).toEqual(
+					expect.objectContaining({
+						comment_id: expect.any(Number),
+						body: expect.any(String),
+						votes: expect.any(Number),
+						author: expect.any(String),
+						article_id: expect.any(Number),
+						created_at: expect.any(String),
+					})
+				);
+			});
+	});
+	test('404: valid but non-existent id', () => {
+		return request(app)
+			.post('/api/articles/89/comments')
+			.send(newComment)
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Invalid ID');
+			});
+	});
+	test('400: invalid id (NAN)', () => {
+		return request(app)
+			.post('/api/articles/banana/comments')
+			.send(newComment)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+	test('400: returns when passed invalid properties (not username or body)', () => {
+		return request(app)
+			.post('/api/articles/1/comments')
+			.send({
+				banana: 'butter_bridge',
+				body: "my cat is snoring, couldn't finish reading",
+			})
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+	test('400: returns if any of the required properties for posting is missing', () => {
+		return request(app)
+			.post('/api/articles/1/comments')
+			.send({ body: "my cat is snoring, couldn't finish reading" })
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+});
