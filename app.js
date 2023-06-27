@@ -8,6 +8,7 @@ const {
 	deleteCommentById,
 	postCommentByArticleId,
   getCommentsByArticleId,
+	getAllUsers,
 } = require('./controller/controller');
 const { handlePsqlErrors, handleServerErrors } = require('./errors/errors');
 
@@ -30,6 +31,8 @@ app.delete('/api/comments/:comment_id', deleteCommentById);
 app.post('/api/articles/:article_id/comments', postCommentByArticleId);
 
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
+
+app.get('/api/users', getAllUsers);
 
 app.use((err, req, res, next) => {
 	if (err.msg) {

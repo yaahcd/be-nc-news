@@ -3,6 +3,7 @@ const {
 	selectAllArticles,
 	selectArticlesById,
 	checkIdExists,
+  selectAllUsers,
 	updatedVotesOfSelectedId,
   checkCommentIdExists,
   deleteSelectedComment,
@@ -79,6 +80,12 @@ exports.getCommentsByArticleId = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+exports.getAllUsers = (req, res, next) => {
+  selectAllUsers().then((users) => {
+		res.status(200).send({users});
+	});
+}
 
 exports.deleteCommentById = (req, res, next) => {
   const id = req.params.comment_id 

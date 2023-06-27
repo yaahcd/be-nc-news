@@ -25,7 +25,7 @@ describe('GET /api', () => {
 });
 
 describe('GET /api/topics', () => {
-	test('200: Should return with an array containing all topics as objects with description and slug keys', () => {
+	test('200: Should return with an array containing all topics as objects with description and slug properties', () => {
 		return request(app)
 			.get('/api/topics')
 			.expect(200)
@@ -214,6 +214,22 @@ describe('POST /api/articles/:article_id/comments', () => {
 			});
 	});
 });
+describe('GET /api/users', () => {
+	test('200: Should return an array containing all users as objects with username, name and avatar properties', () => {
+		return request(app)
+			.get('/api/users')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.users.length).toBe(4);
+				body.users.forEach((user) => {
+					expect(user).toHaveProperty('username', expect.any(String));
+					expect(user).toHaveProperty('name', expect.any(String));
+					expect(user).toHaveProperty('avatar_url', expect.any(String));
+				});
+			})
+		})
+	})
+
 describe('DELETE /api/comments/:comment_id', () => {
 	test('204: Should return empty object if passed valid comment id', () => {
 		return request(app).delete('/api/comments/2').expect(204)

@@ -82,6 +82,11 @@ exports.checkIdExists = (id) => {
 		});
 };
 
+exports.selectAllUsers = () => {
+	return db.query(`SELECT * FROM users`).then((users) => {
+		return users.rows;
+	});
+}
 exports.deleteSelectedComment = (id) => {
  return db.query(`DELETE FROM comments WHERE comment_id = $1`, [id]).then((result) => {
 	return result
