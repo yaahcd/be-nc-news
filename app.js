@@ -1,6 +1,11 @@
 const express = require('express');
-const { getAllTopics, getApi, getAllArticles, getArticlesById } = require('./controller/controller');
-const { handlePsqlErrors } = require('./errors/errors')
+const {
+	getAllTopics,
+	getApi,
+	getAllArticles,
+	getArticlesById,
+} = require('./controller/controller');
+const { handlePsqlErrors } = require('./errors/errors');
 
 const app = express();
 
@@ -13,16 +18,15 @@ app.get('/api/articles', getAllArticles);
 app.get('/api/articles/:article_id', getArticlesById);
 
 app.use((err, req, res, next) => {
-  if(err.msg) {
-    res.status(err.status).send({ msg: err.msg })
-  } else {
-    next(err)
-  }
+	if (err.msg) {
+		res.status(err.status).send({ msg: err.msg });
+	} else {
+		next(err);
+	}
 });
 
 app.use((err, req, res, next) => {
-  handlePsqlErrors(err, req, res, next)
+	handlePsqlErrors(err, req, res, next);
 });
 
 module.exports = app;
-
