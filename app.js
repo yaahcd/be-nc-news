@@ -4,10 +4,13 @@ const {
 	getApi,
 	getAllArticles,
 	getArticlesById,
+	updateVotesById,
 } = require('./controller/controller');
 const { handlePsqlErrors } = require('./errors/errors');
 
 const app = express();
+
+app.use(express.json());
 
 app.get('/api', getApi);
 
@@ -16,6 +19,8 @@ app.get('/api/topics', getAllTopics);
 app.get('/api/articles', getAllArticles);
 
 app.get('/api/articles/:article_id', getArticlesById);
+
+app.patch('/api/articles/:article_id', updateVotesById);
 
 app.use((err, req, res, next) => {
 	if (err.msg) {

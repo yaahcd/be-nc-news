@@ -32,3 +32,29 @@ exports.selectArticlesById = (id) => {
 			return article.rows;
 		});
 };
+
+exports.updatedVotesOfSelectedId = (id, inputVotes) => {
+	return db
+		.query(`SELECT votes FROM articles WHERE article_id = $1;`, [id])
+		.then(({ rows }) => {
+			const newVotes = rows[0].votes + inputVotes;
+			return db
+				.query(
+					`UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *;`,
+					[newVotes, id]
+				)
+				.then((updatedArticle) => {
+					return updatedArticle.rows;
+				});
+		});
+};
+
+exports.checkIdExists = (id) => {
+	return db
+		.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
+		.then((result) => {
+			if (result.rows.length === 0) {
+				return Promise.reject({ status: 404, msg: 'Invalid ID' });
+			}
+		});
+};
