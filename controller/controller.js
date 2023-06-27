@@ -58,7 +58,7 @@ exports.deleteCommentById = (req, res, next) => {
 
   Promise.all(promises).then((completedPromises) => {
     const emptyObj = completedPromises
-    res.status(204).send(emptyObj)
+    res.status(204).send()
   })
   .catch(next)
 }
