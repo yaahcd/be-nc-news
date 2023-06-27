@@ -2,10 +2,13 @@ const {
 	selectAllModels,
 	selectAllArticles,
 	selectArticlesById,
-	addCommentByArticleId,
-	selectCommentsByArticleId,
 	checkIdExists,
   selectAllUsers,
+	updatedVotesOfSelectedId,
+  checkCommentIdExists,
+  deleteSelectedComment,
+	addCommentByArticleId,
+	selectCommentsByArticleId
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -34,6 +37,23 @@ exports.getArticlesById = (req, res, next) => {
 		.catch(next);
 };
 
+exports.updateVotesById = (req, res, next) => {
+	const id = req.params.article_id;
+	const inputVotes = req.body.inc_votes;
+
+	const promises = [
+		checkIdExists(id),
+		updatedVotesOfSelectedId(id, inputVotes),
+	];
+
+	Promise.all(promises)
+		.then((completedPromises) => {
+			const updatedArticle = completedPromises[1];
+			res.status(201).send(updatedArticle);
+    })
+    .catch(next)
+    }
+    
 exports.postCommentByArticleId = (req, res, next) => {
 	const id = req.params.article_id;
 	const body = req.body;
@@ -65,4 +85,16 @@ exports.getAllUsers = (req, res, next) => {
   selectAllUsers().then((users) => {
 		res.status(200).send({users});
 	});
+}
+
+exports.deleteCommentById = (req, res, next) => {
+  const id = req.params.comment_id 
+
+  const promises = [checkCommentIdExists(id), deleteSelectedComment(id)]
+
+  Promise.all(promises).then((completedPromises) => {
+    const emptyObj = completedPromises
+    res.status(204).send()
+  })
+  .catch(next)
 }

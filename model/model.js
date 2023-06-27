@@ -33,6 +33,22 @@ exports.selectArticlesById = (id) => {
 		});
 };
 
+exports.updatedVotesOfSelectedId = (id, inputVotes) => {
+	return db
+		.query(`SELECT votes FROM articles WHERE article_id = $1;`, [id])
+		.then(({ rows }) => {
+			const newVotes = rows[0].votes + inputVotes;
+			return db
+				.query(
+					`UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *;`,
+					[newVotes, id]
+				)
+				.then((updatedArticle) => {
+					return updatedArticle.rows;
+				});
+		})
+	}
+	
 exports.addCommentByArticleId = (id, body) => {
 	return db
 		.query(
@@ -70,4 +86,19 @@ exports.selectAllUsers = () => {
 	return db.query(`SELECT * FROM users`).then((users) => {
 		return users.rows;
 	});
+}
+exports.deleteSelectedComment = (id) => {
+ return db.query(`DELETE FROM comments WHERE comment_id = $1`, [id]).then((result) => {
+	return result
+ })
+}
+
+exports.checkCommentIdExists = (id) => {
+	return db
+		.query(`SELECT * FROM comments WHERE comment_id = $1`, [id])
+		.then((result) => {
+			if (result.rows.length === 0) {
+				return Promise.reject({ status: 404, msg: 'Invalid ID' });
+			}
+		});
 }

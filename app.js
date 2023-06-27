@@ -4,6 +4,8 @@ const {
 	getApi,
 	getAllArticles,
 	getArticlesById,
+	updateVotesById,
+	deleteCommentById,
 	postCommentByArticleId,
   getCommentsByArticleId,
 	getAllUsers,
@@ -21,6 +23,10 @@ app.get('/api/topics', getAllTopics);
 app.get('/api/articles', getAllArticles);
 
 app.get('/api/articles/:article_id', getArticlesById);
+
+app.patch('/api/articles/:article_id', updateVotesById);
+
+app.delete('/api/comments/:comment_id', deleteCommentById);
 
 app.post('/api/articles/:article_id/comments', postCommentByArticleId);
 
