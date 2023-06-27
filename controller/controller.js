@@ -2,6 +2,8 @@ const {
 	selectAllModels,
 	selectAllArticles,
 	selectArticlesById,
+	selectCommentsByArticleId,
+	checkIdExists,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -26,6 +28,19 @@ exports.getArticlesById = (req, res, next) => {
 	selectArticlesById(id)
 		.then((article) => {
 			res.status(200).send(article);
+		})
+		.catch(next);
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+	const id = req.params.article_id;
+
+	const promises = [checkIdExists(id), selectCommentsByArticleId(id)];
+
+	Promise.all(promises)
+		.then((completedPromises) => {
+			const commentList = completedPromises[1];
+			res.status(200).send(commentList);
 		})
 		.catch(next);
 };
