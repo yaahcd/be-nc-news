@@ -6,8 +6,10 @@ const {
 	getArticlesById,
 	updateVotesById,
 	deleteCommentById,
+	postCommentByArticleId,
+  getCommentsByArticleId,
 } = require('./controller/controller');
-const { handlePsqlErrors } = require('./errors/errors');
+const { handlePsqlErrors, handleServerErrors } = require('./errors/errors');
 
 const app = express();
 
@@ -25,6 +27,10 @@ app.patch('/api/articles/:article_id', updateVotesById);
 
 app.delete('/api/comments/:comment_id', deleteCommentById);
 
+app.post('/api/articles/:article_id/comments', postCommentByArticleId);
+
+app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
+
 app.use((err, req, res, next) => {
 	if (err.msg) {
 		res.status(err.status).send({ msg: err.msg });
@@ -33,8 +39,8 @@ app.use((err, req, res, next) => {
 	}
 });
 
-app.use((err, req, res, next) => {
-	handlePsqlErrors(err, req, res, next);
-});
+app.use(handlePsqlErrors);
+
+app.use(handleServerErrors);
 
 module.exports = app;
