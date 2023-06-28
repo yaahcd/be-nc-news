@@ -1,5 +1,5 @@
 const {
-	selectAllModels,
+	selectAllTopics,
 	selectAllArticles,
 	selectArticlesById,
 	checkIdExists,
@@ -17,7 +17,7 @@ exports.getApi = (req, res, next) => {
 };
 
 exports.getAllTopics = (req, res, next) => {
-	selectAllModels().then((topics) => {
+	selectAllTopics().then((topics) => {
 		res.status(200).send(topics);
 	});
 };
