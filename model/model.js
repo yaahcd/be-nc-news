@@ -129,6 +129,15 @@ exports.selectAllUsers = () => {
 	});
 };
 
+exports.selectUserByUsername = (username) => {
+	return db.query(`SELECT * FROM users WHERE username = $1`, [username]).then((users) => {
+		if (users.rows.length === 0) {
+			return Promise.reject({ status: 404, msg: 'Invalid username' });
+		}
+		return users.rows;
+	});
+}
+
 exports.deleteSelectedComment = (id) => {
 	return db
 		.query(`DELETE FROM comments WHERE comment_id = $1`, [id])
