@@ -58,22 +58,30 @@ describe('GET /api/articles/:article_id', () => {
 				);
 			});
 	});
-	test('404: valid but non-existent id', () => {
+	test('200: Should return an object containing comment count for specified article id', () => {
 		return request(app)
-			.get('/api/articles/20')
-			.expect(404)
+			.get('/api/articles/1')
+			.expect(200)
 			.then(({ body }) => {
-				expect(body.msg).toBe('Invalid ID');
+				expect(body[0]).toHaveProperty('comment_count');
 			});
 	});
-	test('400: invalid id (NAN)', () => {
-		return request(app)
-			.get('/api/articles/banana')
-			.expect(400)
-			.then(({ body }) => {
-				expect(body.msg).toBe('Bad request');
-			});
-	});
+});
+test('404: valid but non-existent id', () => {
+	return request(app)
+		.get('/api/articles/20')
+		.expect(404)
+		.then(({ body }) => {
+			expect(body.msg).toBe('Invalid ID');
+		});
+});
+test('400: invalid id (NAN)', () => {
+	return request(app)
+		.get('/api/articles/banana')
+		.expect(400)
+		.then(({ body }) => {
+			expect(body.msg).toBe('Bad request');
+		});
 });
 describe('GET /api/articles', () => {
 	test('200: Should return with an array containing all articles as objects with comment_count key and sorted by date in descending order', () => {
