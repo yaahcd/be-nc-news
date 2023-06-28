@@ -129,6 +129,22 @@ exports.selectAllUsers = () => {
 	});
 };
 
+exports.updateSelectedComment = (id, inputVotes) => {
+	return db
+		.query(`SELECT votes FROM comments WHERE comment_id = $1;`, [id])
+		.then(({ rows }) => {
+			const newVotes = rows[0].votes + inputVotes;
+			return db
+				.query(
+					`UPDATE comments SET votes = $1 WHERE comment_id = $2 RETURNING *;`,
+					[newVotes, id]
+				)
+				.then((updatedArticle) => {
+					return updatedArticle.rows;
+				});
+		});
+}
+
 exports.deleteSelectedComment = (id) => {
 	return db
 		.query(`DELETE FROM comments WHERE comment_id = $1`, [id])
