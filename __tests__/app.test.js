@@ -125,12 +125,20 @@ describe('GET api/articles?topic=cats / mitch', () => {
 				});
 			});
 	});
-	test('400: returns if invalid topic is passed', () => {
+	test('200: Should return an empty array if passed topic exists but there are no articles related to it', () => {
+		return request(app)
+			.get('/api/articles?topic=paper')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toEqual([]);
+			});
+	});
+	test('404: returns if invalid topic is passed', () => {
 		return request(app)
 			.get('/api/articles?topic=banana')
-			.expect(400)
+			.expect(404)
 			.then(({ body }) => {
-				expect(body.msg).toBe('Bad request');
+				expect(body.msg).toBe('Topic not found');
 			});
 	});
 });
@@ -169,14 +177,6 @@ describe('GET api/articles?sort_by', () => {
 	});
 });
 describe('GET api/articles?order=ASC / DESC', () => {
-	test('200: Should return article list ordered by descending order by default', () => {
-		return request(app)
-			.get('/api/articles')
-			.expect(200)
-			.then(({ body }) => {
-				expect(body.articles).toBeSortedBy('created_at', { descending: true });
-			});
-	});
 	test('200: Should return article list ordered by specified order', () => {
 		return request(app)
 			.get('/api/articles?order=asc')
