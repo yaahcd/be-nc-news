@@ -349,3 +349,59 @@ describe('DELETE /api/comments/:comment_id', () => {
 			});
 	});
 });
+describe('POST /api/articles', () => {
+	test('201: Should return passed article', () => {
+		const newArticle = {
+			author: 'butter_bridge',
+			title: "More about cats",
+			body: 'Cats are the sleepiest of all mammals. They spend an average of 16 hours sleeping each day',
+			topic: 'cats'
+		};
+		return request(app)
+			.post('/api/articles')
+			.send(newArticle)
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.article_posted[0]).toEqual(
+					expect.objectContaining({
+						article_id: expect.any(Number),
+						title: expect.any(String),
+						topic: expect.any(String),
+						author: expect.any(String),
+						body: expect.any(String),
+						created_at: expect.any(String),
+						votes: expect.any(Number),
+						article_img_url: expect.any(String),
+					})
+				);
+			});
+	});
+	test('400: returns if passed wrong user name (author is not in users list)', () => {
+		const newArticle = {
+			author: 'yaah',
+			title: "More about cats",
+			body: 'Cats are the sleepiest of all mammals. They spend an average of 16 hours sleeping each day',
+			topic: 'cats'
+		};
+		return request(app)
+			.post('/api/articles')
+			.send(newArticle)
+			.expect(400)
+			.then(({ body }) => {
+			expect(body.msg).toBe('Bad request');
+	})
+})
+test('400: returns if there is missing properties', () => {
+	const newArticle = {
+		title: "More about cats",
+		body: 'Cats are the sleepiest of all mammals. They spend an average of 16 hours sleeping each day',
+	};
+	return request(app)
+		.post('/api/articles')
+		.send(newArticle)
+		.expect(400)
+		.then(({ body }) => {
+		expect(body.msg).toBe('Bad request');
+})
+})
+})

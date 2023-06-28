@@ -9,6 +9,7 @@ const {
 	postCommentByArticleId,
 	getCommentsByArticleId,
 	getAllUsers,
+	postArticle,
 } = require('./controller/controller');
 const { handlePsqlErrors, handleServerErrors } = require('./errors/errors');
 
@@ -21,6 +22,8 @@ app.get('/api', getApi);
 app.get('/api/topics', getAllTopics);
 
 app.get('/api/articles', getAllArticles);
+
+app.post('/api/articles', postArticle);
 
 app.get('/api/articles/:article_id', getArticlesById);
 

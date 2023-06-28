@@ -9,6 +9,7 @@ const {
 	deleteSelectedComment,
 	addCommentByArticleId,
 	selectCommentsByArticleId,
+	postNewArticle,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -31,6 +32,15 @@ exports.getAllArticles = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+exports.postArticle = (req, res, next) => {
+	const body = req.body
+
+	postNewArticle(body).then((article) => {
+		res.status(201).send({article_posted : article})
+	})
+	.catch(next)
+}
 
 exports.getArticlesById = (req, res, next) => {
 	const id = req.params.article_id;

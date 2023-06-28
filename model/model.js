@@ -55,6 +55,17 @@ exports.selectAllArticles = (topic, sort_by = 'created_at', order = 'DESC') => {
 	});
 };
 
+exports.postNewArticle = (body) => {
+	return db
+		.query(
+			`INSERT INTO articles (author, title, body, topic) VALUES ($1, $2, $3, $4) RETURNING*;`,
+			[body.author, body.title, body.body, body.topic]
+		)
+		.then((newArticle) => {
+			return newArticle.rows;
+		});
+}
+
 exports.selectArticlesById = (id) => {
 	return db
 		.query(
