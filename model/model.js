@@ -7,19 +7,6 @@ exports.selectAllModels = () => {
 };
 
 exports.selectAllArticles = (topic, sort_by = 'created_at', order = 'DESC') => {
-	const validSortBy = [
-		'article_id',
-		'title',
-		'topic',
-		'author',
-		'created_at',
-		'votes',
-		'article_img_url',
-	];
-
-	if (!validSortBy.includes(sort_by)) {
-		return Promise.reject({ status: 400, msg: 'Bad request' });
-	}
 
 	let query = `SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, 
   COUNT(c.article_id) AS comment_count 
