@@ -11,6 +11,6 @@ You will also need the following dependencies to run the project:
     "pg": "^8.7.3",
     "express": "^4.18.2".
   
-This project has been developed using TDD and tests can be run if jest/jest sorted are installed.
+This project has been developed using TDD and tests can be run if jest/jest sorted/supertest are installed.
 
 Finally, Node and Postgres will need to be at least at version 20.3.0 and 14.8, respectively.
