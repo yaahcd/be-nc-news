@@ -359,12 +359,12 @@ describe('GET /api/users/:username', () => {
 					expect.objectContaining({
 						username: expect.any(String),
 						name: expect.any(String),
-						avatar_url: expect.any(String)
+						avatar_url: expect.any(String),
 					})
 				);
 			});
 	});
-})
+});
 test('404: valid but non-existent username', () => {
 	return request(app)
 		.get('/api/users/banana')
@@ -373,4 +373,3 @@ test('404: valid but non-existent username', () => {
 			expect(body.msg).toBe('Invalid username');
 		});
 });
-
