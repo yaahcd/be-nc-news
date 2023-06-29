@@ -9,6 +9,7 @@ const {
 	deleteSelectedComment,
 	addCommentByArticleId,
 	selectCommentsByArticleId,
+	postNewArticle,
 	updateSelectedComment,
 	selectUserByUsername,
 } = require('../model/model');
@@ -30,6 +31,16 @@ exports.getAllArticles = (req, res, next) => {
 	selectAllArticles(topic, sort_by, order)
 		.then((articles) => {
 			res.status(200).send({ articles });
+		})
+		.catch(next);
+};
+
+exports.postArticle = (req, res, next) => {
+	const body = req.body;
+
+	postNewArticle(body)
+		.then((article) => {
+			res.status(201).send({ article_posted: article });
 		})
 		.catch(next);
 };
@@ -96,10 +107,13 @@ exports.getAllUsers = (req, res, next) => {
 };
 
 exports.updatedCommentById = (req, res, next) => {
-const id = req.params.comment_id
-const inputVotes = req.body.inc_votes;
+	const id = req.params.comment_id;
+	const inputVotes = req.body.inc_votes;
 
-const promises = [checkCommentIdExists(id), updateSelectedComment(id, inputVotes)];
+	const promises = [
+		checkCommentIdExists(id),
+		updateSelectedComment(id, inputVotes),
+	];
 
 	Promise.all(promises)
 		.then((completedPromises) => {
@@ -107,7 +121,7 @@ const promises = [checkCommentIdExists(id), updateSelectedComment(id, inputVotes
 			res.status(201).send({ updatedComment });
 		})
 		.catch(next);
-}
+};
 
 exports.deleteCommentById = (req, res, next) => {
 	const id = req.params.comment_id;
