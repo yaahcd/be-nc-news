@@ -569,8 +569,58 @@ describe('Returns total_count property when fetching articles', () => {
 			.get('/api/articles?topic=mitch')
 			.expect(200)
 			.then(({ body }) => {
-				expect(body).toHaveProperty('total_cofunt');
+				expect(body).toHaveProperty('total_count');
 				expect(body.total_count).toBe(10);
+			});
+	});
+});
+describe('GET /api/articles/:article_id/comments?limit=num', () => {
+	test('200: Should return list with amount of objects equal to limit passed', () => {
+		return request(app)
+			.get('/api/articles/1/comments?limit=10')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.commentList.length).toBe(10);
+				body.commentList.forEach((comment) => {
+					expect(comment).toHaveProperty('comment_id', expect.any(Number));
+					expect(comment).toHaveProperty('body', expect.any(String));
+					expect(comment).toHaveProperty('author', expect.any(String));
+					expect(comment).toHaveProperty('created_at', expect.any(String));
+					expect(comment).toHaveProperty('votes', expect.any(Number));
+					expect(comment).toHaveProperty('article_id', expect.any(Number));
+				});
+			});
+	});
+	test('400: Returns if passed limit is invalid (NAN)', () => {
+		return request(app)
+			.get('/api/articles/1/comments?limit=banana')
+			.expect(400)
+			.then(({ body }) => expect(body.msg).toBe('Bad request'));
+	});
+});
+describe('GET /api/articles/:article_id/comments?p=num', () => {
+	test('200: Should return list with amount of objects equal to limit(defaults to 10) passed and according to page number', () => {
+		return request(app)
+			.get('/api/articles/1/comments?p=1')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.commentList.length).toBe(10);
+			});
+	});
+	test('200: Should return empty array if passed page is a valid number but there are no articles to show', () => {
+		return request(app)
+			.get('/api/articles/1/comments?p=10')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.commentList).toEqual([]);
+			});
+	});
+	test('400: returns if passed page is invalid (NAN)', () => {
+		return request(app)
+			.get('/api/articles/1/comments?p=banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
 			});
 	});
 });

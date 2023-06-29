@@ -87,13 +87,14 @@ exports.postCommentByArticleId = (req, res, next) => {
 
 exports.getCommentsByArticleId = (req, res, next) => {
 	const id = req.params.article_id;
+	const { p, limit } = req.query;
 
-	const promises = [checkIdExists(id), selectCommentsByArticleId(id)];
+	const promises = [checkIdExists(id), selectCommentsByArticleId(id, p, limit)];
 
 	Promise.all(promises)
 		.then((completedPromises) => {
 			const commentList = completedPromises[1];
-			res.status(200).send(commentList);
+			res.status(200).send({ commentList });
 		})
 		.catch(next);
 };
