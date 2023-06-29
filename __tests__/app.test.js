@@ -328,7 +328,7 @@ describe('GET /api/users', () => {
 	});
 });
 describe('DELETE /api/comments/:comment_id', () => {
-	test('204: Should return empty object if passed valid comment id', () => {
+	test('204: Returns if passed valid id', () => {
 		return request(app).delete('/api/comments/2').expect(204);
 	});
 	test('404: valid but non-existent id', () => {
@@ -654,6 +654,27 @@ describe('POST /api/topics', () => {
 			.expect(400)
 			.then(({ body }) => {
 				expect(body.msg).toBe('Missing information or wrong information');
+			});
+	});
+});
+describe('DELETE /api/articles/:article_id', () => {
+	test('204: Returns if passed valid id', () => {
+		return request(app).delete('/api/articles/2').expect(204);
+	});
+	test('404: valid but non-existent id', () => {
+		return request(app)
+			.delete('/api/articles/255')
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Invalid ID');
+			});
+	});
+	test('400: invalid id (NAN)', () => {
+		return request(app)
+			.delete('/api/articles/banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
 			});
 	});
 });
