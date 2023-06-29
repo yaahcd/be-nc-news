@@ -327,7 +327,6 @@ describe('GET /api/users', () => {
 			});
 	});
 });
-
 describe('DELETE /api/comments/:comment_id', () => {
 	test('204: Should return empty object if passed valid comment id', () => {
 		return request(app).delete('/api/comments/2').expect(204);
@@ -343,6 +342,53 @@ describe('DELETE /api/comments/:comment_id', () => {
 	test('400: invalid id (NAN)', () => {
 		return request(app)
 			.delete('/api/comments/banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+});
+describe('PATCH /api/comments/:comment_id', () => {
+	test('200: Should return comment with updated vote count when passed a positive number', () => {
+		return request(app)
+			.patch('/api/comments/1')
+			.send({ inc_votes: 9 })
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.updatedComment[0].votes).toBe(25);
+			});
+	});
+	test('200: Should return comment with updated vote count when passed a negative number', () => {
+		return request(app)
+			.patch('/api/comments/1')
+			.send({ inc_votes: -150 })
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.updatedComment[0].votes).toBe(-134);
+			});
+	});
+	test('404: valid but non-existent id', () => {
+		return request(app)
+			.patch('/api/comments/25')
+			.send({ inc_votes: -150 })
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Invalid ID');
+			});
+	});
+	test('400: invalid id (NAN)', () => {
+		return request(app)
+			.patch('/api/comments/banana')
+			.send({ inc_votes: -150 })
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+	test('400: invalid input passed (NAN)', () => {
+		return request(app)
+			.patch('/api/comments/1')
+			.send({ inc_votes: 'banana' })
 			.expect(400)
 			.then(({ body }) => {
 				expect(body.msg).toBe('Bad request');

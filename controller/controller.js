@@ -9,6 +9,7 @@ const {
 	deleteSelectedComment,
 	addCommentByArticleId,
 	selectCommentsByArticleId,
+	updateSelectedComment,
 	selectUserByUsername,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
@@ -93,6 +94,20 @@ exports.getAllUsers = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+exports.updatedCommentById = (req, res, next) => {
+const id = req.params.comment_id
+const inputVotes = req.body.inc_votes;
+
+const promises = [checkCommentIdExists(id), updateSelectedComment(id, inputVotes)];
+
+	Promise.all(promises)
+		.then((completedPromises) => {
+			const updatedComment = completedPromises[1];
+			res.status(201).send({ updatedComment });
+		})
+		.catch(next);
+}
 
 exports.deleteCommentById = (req, res, next) => {
 	const id = req.params.comment_id;
