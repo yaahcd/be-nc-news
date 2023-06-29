@@ -220,3 +220,11 @@ exports.postTopic = (body) => {
 			return newTopic.rows;
 		});
 };
+
+exports.deleteSelectedArticle = (id) => {
+	return db
+		.query(`DELETE FROM articles WHERE article_id = $1`, [id])
+		.then((result) => {
+			return result;
+		});
+};

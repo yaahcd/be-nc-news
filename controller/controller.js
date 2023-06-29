@@ -13,6 +13,7 @@ const {
 	updateSelectedComment,
 	selectUserByUsername,
 	postTopic,
+	deleteSelectedArticle,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -154,6 +155,18 @@ exports.postNewTopic = (req, res, next) => {
 	postTopic(body)
 		.then((postedTopic) => {
 			res.status(201).send({ postedTopic });
+		})
+		.catch(next);
+};
+
+exports.deleteArticleById = (req, res, next) => {
+	const id = req.params.article_id;
+
+	const promises = [checkIdExists(id), deleteSelectedArticle(id)];
+
+	Promise.all(promises)
+		.then((completedPromises) => {
+			res.status(204).send();
 		})
 		.catch(next);
 };
