@@ -64,17 +64,17 @@ exports.postNewArticle = (body) => {
 		.then((newArticle) => {
 			return newArticle.rows;
 		});
-}
+};
 
 exports.selectArticlesById = (id) => {
 	return db
 		.query(
 			`SELECT a.article_id, a.title, a.topic, a.author, a.body, a.created_at, a.votes, a.article_img_url, 
-		COUNT(c.article_id) AS comment_count 
-		FROM articles a 
-		JOIN comments c ON a.article_id = c.article_id 
-		WHERE a.article_id = $1
-		GROUP BY a.article_id;`,
+			COUNT(c.article_id) AS comment_count 
+			FROM articles a 
+			JOIN comments c ON a.article_id = c.article_id 
+			WHERE a.article_id = $1
+			GROUP BY a.article_id;`,
 			[id]
 		)
 		.then((article) => {
@@ -138,6 +138,33 @@ exports.selectAllUsers = () => {
 	return db.query(`SELECT * FROM users`).then((users) => {
 		return users.rows;
 	});
+};
+
+exports.updateSelectedComment = (id, inputVotes) => {
+	return db
+		.query(`SELECT votes FROM comments WHERE comment_id = $1;`, [id])
+		.then(({ rows }) => {
+			const newVotes = rows[0].votes + inputVotes;
+			return db
+				.query(
+					`UPDATE comments SET votes = $1 WHERE comment_id = $2 RETURNING *;`,
+					[newVotes, id]
+				)
+				.then((updatedArticle) => {
+					return updatedArticle.rows;
+				});
+		});
+};
+
+exports.selectUserByUsername = (username) => {
+	return db
+		.query(`SELECT * FROM users WHERE username = $1`, [username])
+		.then((users) => {
+			if (users.rows.length === 0) {
+				return Promise.reject({ status: 404, msg: 'Invalid username' });
+			}
+			return users.rows;
+		});
 };
 
 exports.deleteSelectedComment = (id) => {

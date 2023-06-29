@@ -10,6 +10,8 @@ const {
 	addCommentByArticleId,
 	selectCommentsByArticleId,
 	postNewArticle,
+	updateSelectedComment,
+	selectUserByUsername,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -34,13 +36,14 @@ exports.getAllArticles = (req, res, next) => {
 };
 
 exports.postArticle = (req, res, next) => {
-	const body = req.body
+	const body = req.body;
 
-	postNewArticle(body).then((article) => {
-		res.status(201).send({article_posted : article})
-	})
-	.catch(next)
-}
+	postNewArticle(body)
+		.then((article) => {
+			res.status(201).send({ article_posted: article });
+		})
+		.catch(next);
+};
 
 exports.getArticlesById = (req, res, next) => {
 	const id = req.params.article_id;
@@ -96,9 +99,28 @@ exports.getCommentsByArticleId = (req, res, next) => {
 };
 
 exports.getAllUsers = (req, res, next) => {
-	selectAllUsers().then((users) => {
-		res.status(200).send({ users });
-	});
+	selectAllUsers()
+		.then((users) => {
+			res.status(200).send({ users });
+		})
+		.catch(next);
+};
+
+exports.updatedCommentById = (req, res, next) => {
+	const id = req.params.comment_id;
+	const inputVotes = req.body.inc_votes;
+
+	const promises = [
+		checkCommentIdExists(id),
+		updateSelectedComment(id, inputVotes),
+	];
+
+	Promise.all(promises)
+		.then((completedPromises) => {
+			const updatedComment = completedPromises[1];
+			res.status(201).send({ updatedComment });
+		})
+		.catch(next);
 };
 
 exports.deleteCommentById = (req, res, next) => {
@@ -110,6 +132,16 @@ exports.deleteCommentById = (req, res, next) => {
 		.then((completedPromises) => {
 			const emptyObj = completedPromises;
 			res.status(204).send();
+		})
+		.catch(next);
+};
+
+exports.getUserByUsername = (req, res, next) => {
+	const username = req.params.username;
+
+	selectUserByUsername(username)
+		.then((user) => {
+			res.status(200).send({ user });
 		})
 		.catch(next);
 };
