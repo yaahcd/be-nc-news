@@ -395,3 +395,27 @@ describe('PATCH /api/comments/:comment_id', () => {
 			});
 	});
 });
+describe('GET /api/users/:username', () => {
+	test('200: Should return user object according to passed username', () => {
+		return request(app)
+			.get('/api/users/butter_bridge')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.user[0]).toEqual(
+					expect.objectContaining({
+						username: expect.any(String),
+						name: expect.any(String),
+						avatar_url: expect.any(String),
+					})
+				);
+			});
+	});
+});
+test('404: valid but non-existent username', () => {
+	return request(app)
+		.get('/api/users/banana')
+		.expect(404)
+		.then(({ body }) => {
+			expect(body.msg).toBe('Invalid username');
+		});
+});

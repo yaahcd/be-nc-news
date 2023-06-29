@@ -10,6 +10,7 @@ const {
 	addCommentByArticleId,
 	selectCommentsByArticleId,
 	updateSelectedComment,
+	selectUserByUsername,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -87,9 +88,11 @@ exports.getCommentsByArticleId = (req, res, next) => {
 };
 
 exports.getAllUsers = (req, res, next) => {
-	selectAllUsers().then((users) => {
-		res.status(200).send({ users });
-	});
+	selectAllUsers()
+		.then((users) => {
+			res.status(200).send({ users });
+		})
+		.catch(next);
 };
 
 exports.updatedCommentById = (req, res, next) => {
@@ -119,3 +122,12 @@ exports.deleteCommentById = (req, res, next) => {
 		.catch(next);
 };
 
+exports.getUserByUsername = (req, res, next) => {
+	const username = req.params.username;
+
+	selectUserByUsername(username)
+		.then((user) => {
+			res.status(200).send({ user });
+		})
+		.catch(next);
+};
