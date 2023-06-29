@@ -495,3 +495,82 @@ describe('GET /api/users/:username', () => {
 			});
 	});
 });
+describe('GET /api/articles?limit=num', () => {
+	test('200: Should return list with amount of objects equal to limit passed', () => {
+		return request(app)
+			.get('/api/articles?limit=10')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles.length).toBe(10);
+				body.articles.forEach((article) => {
+					expect(article).toHaveProperty('article_id', expect.any(Number));
+					expect(article).toHaveProperty('topic', expect.any(String));
+					expect(article).toHaveProperty('author', expect.any(String));
+					expect(article).toHaveProperty('created_at', expect.any(String));
+					expect(article).toHaveProperty('article_img_url', expect.any(String));
+					expect(article).toHaveProperty('comment_count', expect.any(String));
+					expect(article).toHaveProperty('title', expect.any(String));
+				});
+			});
+	});
+	test('400: Returns if passed limit is invalid (NAN)', () => {
+		return request(app)
+			.get('/api/articles?limit=banana')
+			.expect(400)
+			.then(({ body }) => expect(body.msg).toBe('Bad request'));
+	});
+});
+describe('GET /api/articles?p=num', () => {
+	test('200: Should return list with amount of objects equal to limit passed and according to page number', () => {
+		return request(app)
+			.get('/api/articles?p=1')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles.length).toBe(10);
+			});
+	});
+	test('200: Should return list with amount of objects equal to limit passed and according to page number', () => {
+		return request(app)
+			.get('/api/articles?p=2')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles.length).toBe(3);
+			});
+	});
+	test('200: Should return empty array if passed page is a valid number but there are no articles to show', () => {
+		return request(app)
+			.get('/api/articles?p=3')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toEqual([]);
+			});
+	});
+	test('400: returns if passed page is invalid (NAN)', () => {
+		return request(app)
+			.get('/api/articles?p=banana')
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Bad request');
+			});
+	});
+});
+describe('Returns total_count property when fetching articles', () => {
+	test('200: Should return list with amount of objects equal to queries passed', () => {
+		return request(app)
+			.get('/api/articles?limit=10')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body).toHaveProperty('total_count');
+				expect(body.total_count).toBe(10);
+			});
+	});
+	test('200: Should return list with amount of objects equal to queries passed', () => {
+		return request(app)
+			.get('/api/articles?topic=mitch')
+			.expect(200)
+			.then(({ body }) => {
+				expect(body).toHaveProperty('total_cofunt');
+				expect(body.total_count).toBe(10);
+			});
+	});
+});
