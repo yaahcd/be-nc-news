@@ -202,3 +202,21 @@ exports.checkCommentIdExists = (id) => {
 			}
 		});
 };
+
+exports.postTopic = (body) => {
+	if (Object.keys(body).length !== 2) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Missing information or wrong information',
+		});
+	}
+
+	return db
+		.query(
+			`INSERT INTO topics (slug, description) VALUES ($1, $2) RETURNING*;`,
+			[body.slug, body.description]
+		)
+		.then((newTopic) => {
+			return newTopic.rows;
+		});
+};

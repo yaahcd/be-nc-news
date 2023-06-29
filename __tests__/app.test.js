@@ -390,7 +390,7 @@ describe('POST /api/articles', () => {
 				expect(body.msg).toBe('Bad request');
 			});
 	});
-	test('400: returns if there is missing properties', () => {
+	test('400: returns if there are missing properties', () => {
 		const newArticle = {
 			title: 'More about cats',
 			body: 'Cats are the sleepiest of all mammals. They spend an average of 16 hours sleeping each day',
@@ -621,6 +621,39 @@ describe('GET /api/articles/:article_id/comments?p=num', () => {
 			.expect(400)
 			.then(({ body }) => {
 				expect(body.msg).toBe('Bad request');
+			});
+	});
+});
+describe('POST /api/topics', () => {
+	test('201: Should return passed article', () => {
+		const newTopic = {
+			slug: 'dogs',
+			description: 'why only talk about cats?',
+		};
+		return request(app)
+			.post('/api/topics')
+			.send(newTopic)
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.postedTopic[0]).toEqual(
+					expect.objectContaining({
+						slug: expect.any(String),
+						description: expect.any(String),
+					})
+				);
+			});
+	});
+
+	test('400: returns if there are missing properties', () => {
+		const newTopic = {
+			slug: 'dogs',
+		};
+		return request(app)
+			.post('/api/topics')
+			.send(newTopic)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Missing information or wrong information');
 			});
 	});
 });

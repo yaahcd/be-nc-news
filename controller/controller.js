@@ -12,6 +12,7 @@ const {
 	postNewArticle,
 	updateSelectedComment,
 	selectUserByUsername,
+	postTopic,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -143,6 +144,16 @@ exports.getUserByUsername = (req, res, next) => {
 	selectUserByUsername(username)
 		.then((user) => {
 			res.status(200).send({ user });
+		})
+		.catch(next);
+};
+
+exports.postNewTopic = (req, res, next) => {
+	const body = req.body;
+
+	postTopic(body)
+		.then((postedTopic) => {
+			res.status(201).send({ postedTopic });
 		})
 		.catch(next);
 };
