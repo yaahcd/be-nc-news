@@ -13,6 +13,16 @@ beforeEach(() => {
 	return seed(data);
 });
 
+describe('All non-existent path', () => {
+	test('404: returns when passed path is not found', () => {
+		return request(app)
+			.get('/api/notapath')
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Not found');
+			});
+	});
+});
 describe('GET /api', () => {
 	test('200: Should return a JSON object with descriptions of all endpoints available', () => {
 		return request(app)
