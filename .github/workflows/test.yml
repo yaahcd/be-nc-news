@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and clone repo
-        use: actions/checkout@v3
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: npm install
       - name: Test utils
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and clone repo
-        use: actions/checkout@v3
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: npm install 
       - name: Test app against live database
