@@ -6,11 +6,11 @@ on:
       - main
 
 jobs:
-    greeting:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Say Hello!
-              run: echo 'Hello from the pipeline'
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello!
+        run: echo 'Hello from the pipeline'
 
   test-utils:
     runs-on: ubuntu-latest
