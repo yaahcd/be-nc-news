@@ -3,7 +3,7 @@ const {
 	handlePsqlErrors,
 	handleServerErrors,
 	handleCustomErrors,
-  handleNonExistentPaths,
+	handleNonExistentPaths,
 } = require('./errors/errors');
 const apiRouter = require('./routers/api-router');
 
