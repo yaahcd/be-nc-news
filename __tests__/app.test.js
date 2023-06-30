@@ -1,3 +1,5 @@
+const wtf = require('wtfnode');
+const whyRunNodelog = require('why-is-node-running')
 const db = require('../db/connection');
 const seed = require('../db/seeds/seed');
 const app = require('../app');
@@ -5,7 +7,11 @@ const data = require('../db/data/test-data/index');
 const request = require('supertest');
 const jsonEndPoints = require('../endpoints.json');
 
-afterAll(() => {
+
+afterAll(async() => {
+	wtf.dump()
+  whyRunNodelog()
+	console.log('process._getActiveHandles()', process._getActiveHandles())
 	return db.end();
 });
 
