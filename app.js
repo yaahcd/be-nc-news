@@ -3,6 +3,7 @@ const {
 	handlePsqlErrors,
 	handleServerErrors,
 	handleCustomErrors,
+  handleNonExistentPaths,
 } = require('./errors/errors');
 const apiRouter = require('./routers/api-router');
 
@@ -18,8 +19,6 @@ app.use(handlePsqlErrors);
 
 app.use(handleServerErrors);
 
-app.all('*', (_, res) => {
-	res.status(404).send({ status: 404, msg: 'Not found' });
-});
+app.all('*', handleNonExistentPaths);
 
 module.exports = app;
