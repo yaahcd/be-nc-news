@@ -25,10 +25,10 @@ jobs:
   test-app:
     runs-on: ubuntu-latest
     steps:
-        - name: Setup timezone
-          uses: zcong1993/setup-timezone@master
-          with:
-           timezone: Europe/London
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Europe/London
       - name: Checkout and clone repo
         uses: actions/checkout@v3
       - name: Setup PSQL
@@ -46,9 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup timezone
-          uses: zcong1993/setup-timezone@master
-          with:
-           timezone: Europe/London
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Europe/London
       - name: Checkout and clone repo
         uses: actions/checkout@v3
       - name: Install dependencies
