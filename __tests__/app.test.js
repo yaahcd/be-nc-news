@@ -5,7 +5,8 @@ const data = require('../db/data/test-data/index');
 const request = require('supertest');
 const jsonEndPoints = require('../endpoints.json');
 
-afterAll(() => {
+
+afterAll(async() => {
 	return db.end();
 });
 
