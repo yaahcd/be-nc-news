@@ -31,6 +31,8 @@ jobs:
           timezone: Europe/London
       - name: Checkout and clone repo
         uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
       - name: Setup PSQL
         uses: harmon758/postgresql-action@v1
         with:
