@@ -31,8 +31,6 @@ jobs:
           timezone: Europe/London
       - name: Checkout and clone repo
         uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
       - name: Setup PSQL
         uses: harmon758/postgresql-action@v1
         with:
@@ -42,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Test app
-        run: PGDATABASE=test_db PGUSER=test_user PGPASSWORD=password npm run test-app --maxWorkers=1
+        run: PGDATABASE=test_db PGUSER=test_user PGPASSWORD=password npm run test-app --coverage --maxWorkers=1
     
   test-app-live-db:
     runs-on: ubuntu-latest
@@ -50,10 +48,10 @@ jobs:
       - name: Setup timezone
         uses: zcong1993/setup-timezone@master
         with:
-          timezone: Europe/London
+         timezone: Europe/London
       - name: Checkout and clone repo
         uses: actions/checkout@v3
       - name: Install dependencies
         run: npm ci 
       - name: Test app against live database
-        run: NODE_ENV=production DATABASE_URL=${{secrets.DATABASE_URL}} npm run test-app --maxWorkers=1
+        run: NODE_ENV=production DATABASE_URL=${{secrets.DATABASE_URL}} npm run test-app --coverage --maxWorkers=1
