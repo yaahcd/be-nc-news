@@ -14,6 +14,8 @@ const {
 	selectUserByUsername,
 	postTopic,
 	deleteSelectedArticle,
+	postUser,
+	checkUserExists,
 } = require('../model/model');
 const jsonEndPoints = require('../endpoints.json');
 
@@ -167,6 +169,16 @@ exports.deleteArticleById = (req, res, next) => {
 	Promise.all(promises)
 		.then((completedPromises) => {
 			res.status(204).send();
+		})
+		.catch(next);
+};
+
+exports.postNewUser = (req, res, next) => {
+	const body = req.body;
+	
+	postUser(body)
+		.then((postedUser) => {
+			res.status(201).send({ postedUser });
 		})
 		.catch(next);
 };
