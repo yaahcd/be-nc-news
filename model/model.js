@@ -77,8 +77,8 @@ exports.selectAllArticles = (
 exports.postNewArticle = (body) => {
 	return db
 		.query(
-			`INSERT INTO articles (author, title, body, topic) VALUES ($1, $2, $3, $4) RETURNING*;`,
-			[body.author, body.title, body.body, body.topic]
+			`INSERT INTO articles (author, title, body, topic, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING*;`,
+			[body.author, body.title, body.body, body.topic, body.article_img_url]
 		)
 		.then((newArticle) => {
 			return newArticle.rows;
