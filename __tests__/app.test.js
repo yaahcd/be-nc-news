@@ -726,3 +726,16 @@ describe('POST /api/users', () => {
 			});
 	})
 });
+describe('DELETE api/topics', () => {
+	test('204: Returns if passed valid topic', () => {
+		return request(app).delete('/api/topics/paper').expect(204);
+	});
+	test('404: invalid topic', () => {
+		return request(app)
+			.delete('/api/topics/banana')
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe('Invalid topic');
+			});
+	});
+})
