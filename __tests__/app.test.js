@@ -365,6 +365,7 @@ describe('POST /api/articles', () => {
 			title: 'More about cats',
 			body: 'Cats are the sleepiest of all mammals. They spend an average of 16 hours sleeping each day',
 			topic: 'cats',
+			article_img_url: 'https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700'
 		};
 		return request(app)
 			.post('/api/articles')
