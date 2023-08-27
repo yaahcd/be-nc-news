@@ -205,9 +205,8 @@
   "DELETE /api/articles/:article_id": {
     "description": "deletes article from specified id",
     "exampleResponse": "{}"
-  }
-},
- "POST /api/users": {
+  },
+  "POST /api/users": {
     "description": "Returns an array with new user information",
     "exampleResponse": {
       "users": {
