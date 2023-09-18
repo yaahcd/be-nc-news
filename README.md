@@ -1,6 +1,6 @@
 # Northcoders News API
 
-Here is a link to the back-end version of this project that is being hosted in render: https://newsbe.onrender.com/.
+Here is a link to the back-end version of this project that is being hosted in render: https://newsbe.onrender.com/api.
 
 This is API runs a blog themed database that allows users to interact with articles that have been posted by commenting and voting. It also allows user to filter and sort articles as well as add comments, update comments and delete comments. For more information on all the endpoints available please visit /api on thee above specified link.
 
